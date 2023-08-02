@@ -33,17 +33,20 @@ Stripe will be used to manage all aspects of subscriptions, including product cr
 
 4. **Referral Program Logic:** Implement the logic to generate, validate, and credit referral codes.
 
+5. **Credits Usage:** A server-side function will be implemented to deduct credits from the user's balance stored in PostgreSQL, upon their action that triggers NFT minting.
+
+
 ### Database Side
-1. **Customer and Subscription Information:** Store basic customer and subscription information in a PostgreSQL database. This will serve as our own record and a way to manage application state.
+1. **Customer and Subscription Information:** Basic customer and subscription information will be stored in a PostgreSQL database, serving as our record and a tool to manage application state.
 
-2. **Referral Data:** Store referral data, such as who referred whom and the status of each referral.
+2. **Referral Data:** Referral data, such as who referred whom and the status of each referral, will be stored.
 
-3. **Subscription Plan Usage:** Track usage of each subscription plan, including the number of credits used and NFTs minted each month, per user.
+3. **Credits and Subscription Plan Usage:** Each user's credit balance will be stored, alongside tracking of each subscription plan usage, including the number of credits used and NFTs minted each month, per user.
 
 ### Design Side
-1. **Subscription Management UI:** Design UI elements for subscription management, including plan selection, payment detail entry, and subscription status viewing.
+1. **Subscription Management UI:** UI elements for subscription management will be designed, including plan selection, payment detail entry, and subscription status viewing.
 
-2. **Referral Program UI:** Design UI elements for the referral program, including referral code entry, code display, and referral status viewing.
+2. **Referral Program UI:** UI elements for the referral program will be designed, including referral code entry, code display, and referral status viewing.
 
 ## Software Design Diagram
 
@@ -59,14 +62,19 @@ sequenceDiagram
     React Frontend->>Google Cloud Functions: Create customer and subscription in Stripe
     Google Cloud Functions->>Stripe: API call to create customer and subscription
     Stripe->>Google Cloud Functions: Return customer and subscription data
-    Google Cloud Functions->>PostgreSQL Database: Store customer and subscription data
-    PostgreSQL Database->>Google Cloud Functions: Confirm data stored
+    Google Cloud Functions->>PostgreSQL Database: Store customer, subscription data, and initial credits
+    PostgreSQL Database->>Google Cloud Functions: Confirm data and credits stored
     Google Cloud Functions->>React Frontend: Confirm subscription created
     User->>React Frontend: Enter referral code (if any)
     React Frontend->>Google Cloud Functions: Validate referral code and credit referrer
     Google Cloud Functions->>PostgreSQL Database: Update referral data
     PostgreSQL Database->>Google Cloud Functions: Confirm referral data updated
     Google Cloud Functions->>React Frontend: Confirm referral processed
+    User->>React Frontend: Trigger action (NFT minting)
+    React Frontend->>Google Cloud Functions: Deduct credits for the action
+    Google Cloud Functions->>PostgreSQL Database: Update credits and track usage
+    PostgreSQL Database->>Google Cloud Functions: Confirm credits and usage updated
+    Google Cloud Functions->>React Frontend: Confirm action processed and display remaining credits
 ```
 
 ## Important Considerations
