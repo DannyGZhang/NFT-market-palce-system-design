@@ -1,5 +1,3 @@
-# Hi Michael, My account was suspended can we connect via Telegram? https://t.me/topdev0627
-
 # Redesigned Authentication Flow in NFT App
 
 In this revised design document, we delve into the redesigned authentication flow for our NFT App. This flow utilizes both Canva and Auth0 authentication services to provide a secure and reliable sign-in experience. Here's a step-by-step breakdown of the components and cloud functions involved in the system:
